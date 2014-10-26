@@ -13,11 +13,16 @@ Specific APIs used:
 Integration and Configuration
 -----------------------------
 
-The GlassLab SDK for Javascript is a global object, accessible as "GlassLabSDK". With the SDK integrated into your project, you can access all of the functions in code or in the browser console. By default, the SDK is configured to send all requests to the container host. This is for ease of access with browser games embedded in Playfully.org.
+The GlassLab SDK for Javascript is a global object, accessible as "GlassLabSDK". With the SDK integrated into your project, you can access all of the functions in code or in the browser console. By default, the SDK is configured to send all requests to the container host for ease of access with browser games embedded in Playfully.org.
 
 **Testing in your own Web Server**
 
 To test in your own web server, simply integrate the SDK library into your source and make sure to call the connect() function with the "uri" parameter as "http://developer.playfully.org". Otherwise, the uri will be set to the container host, as mentioned above.
+
+```
+Connect to developer.playfully.org with my "TEST" gameId
+GlassLabSDK.connect( "TEST", "http://developer.playfully.org" );
+```
 
 **Testing in the Playfully Sandbox**
 
@@ -41,7 +46,7 @@ Note that this function merely generates the link to the telemetry, using the Bl
 
 **App Configuration**
 
-There are several available options to set for your game/app, each of which will be appended to the sessions and telemetry. This is meant to distinguish your data and provides our servers with an easy method to access.
+There are several options available to set for your game/app, each of which will be appended to the sessions and telemetry. This is meant to distinguish your data and provides our servers with an easy method to access.
 - gameId: provided to you by a GlassLab representative.
 - gameVersion: the version of your game/app
 - deviceId: denotes unique users on the same device or computer
@@ -63,6 +68,17 @@ GlassLabSDK.setOptions( {
 } );
 ```
 
+**Console Logs**
+
+By default, the SDK will print nothing to the console. To enable/disable this, call the following functions:
+```
+// Enable console logs
+GlassLabSDK.displayLogs();
+
+// Disable console logs
+GlassLabSDK.hideLogs();
+```
+
 API Format and Examples
 -----------------------
 
@@ -77,8 +93,8 @@ The GlassLab SDK exposes many functions that communicate with the server to perf
 | getPlayerInfo() | Automatically called upon successful login() and getAuthStatus(). Retrieves the current totalTimePlayed for authenticated user. The user won't need to call this function directly. | N/A |
 | login(username, password) | Attempts to log the user into the system. | success: getPlayerInfo |
 | logout() | Attempts to log the user out of the system. | N/A |
-| enroll(courseCode) | Attempts to enroll the logged in user to a course denoted by a 5-character code. | N/A |
-| unenroll(courseId) | Attempts to unenroll the logged in user from a course denoted by the course Id. This Id can be retrieved from getCourses(). | N/A |
+| enroll(courseCode) | Attempts to enroll the authenticated user to a course denoted by a 5-character code. | N/A |
+| unenroll(courseId) | Attempts to unenroll the authenticated user from a course denoted by the course Id. This Id can be retrieved from getCourses(). | N/A |
 | getCourses() | Retrieves a list of enrolled courses for the current authenticated user. | N/A |
 | startPlaySession() | Automatically called at the start of the app session. The user will not need to call this function directly. | N/A |
 | startSession() | Attempts to start a new session for gathering telemetry. A session Id will be returned which will be attached to all subsequent telemetry events. | N/A |
@@ -87,7 +103,7 @@ The GlassLab SDK exposes many functions that communicate with the server to perf
 | saveTelemEvent(name, data) | Record a new telemetry event by specifying the name of the event and JSON-formatted data blob. | N/A |
 | sendTotalTimePlayed() | Records the updated totalTimePlayed for the authenticated user. This function is called automatically and the user does not need to call it directly. | N/A |
 | getAchievements() | Get all available achievements for the game Id. The response will be a JSON-formatted blob with item, group, and subGroup fields for each available achievement. | N/A |
-| saveAchievement(item, group, subgroup) | Record a new achievement specifying parameter that match the server configuration. | N/A |
+| saveAchievement(item, group, subgroup) | Record a new achievement specifying parameters that match the server configuration. | N/A |
 | getSaveGame() | Retrieves the save game blob for the current authenticated user. | N/A |
 | postSaveGame(data) | Records a JSON-formatted save game blob for the current authenticated user. | N/A |
 | postSaveGameBinary(binary) | Records a binary save game blob for the current authenticated user. | N/A |
@@ -113,7 +129,7 @@ It is important to get the response immediately from on-demand requests, because
 - getAchievements()
 - getSaveGame()
 
-The remaining requests are inserted into a queue to be called later. We do this to avoid overloading the servers with high-frequncy, high-volume http requests. The queue flush is determined by parameters sent via getConfig(), which include minimum number of events available, maximum number of events available, and dispatch interval (typically set to 30 seconds). To ensure all data is sent at the end of a game session, you can call endSessionAndFlush() which will automatically flush the queue after ending the session. The queued requests are:
+The remaining requests are inserted into a queue to be called later. We do this to avoid overloading the servers with high-frequncy, high-volume http requests. The queue flush is determined by parameters set via getConfig(), which include minimum number of events available, maximum number of events available, and dispatch interval (typically set to 30 seconds). To ensure all data is sent at the end of a game session, you can call endSessionAndFlush() which will automatically flush the queue after ending the session. The queued requests are:
 - startSession()
 - endSession()
 - endSessionAndFlush() (note this flushes the queue anyway)
@@ -128,7 +144,24 @@ Callbacks
 
 Every API request the user can make to the server allows for custom success() and error() callback functions. These are the last two parameters of each function. Both callbacks accept a single "data" parameter, which is a JSON-formatted string indicating the response.
 
-If you don't specify any callback function, or specifiy null, default callbacks will fire which simply print the information to the console. This information is only printed if you displayLogs is active.
+```
+// Call connect and check the response
+GlassLabSDK.connect( "TEST", "http://developer.playfully.org", function( data ) {
+	console.log( "connect was successful: " + data );
+}, function( data ) {
+	console.log( "connect was unsuccessful: " + data );
+});
+
+// Start a session, send sample telemetry, and end the session
+// No need to listen for success or error
+GlassLabSDK.startSession();
+GlassLabSDK.saveTelemEvent( "event1": { int: 1 } );
+GlassLabSDK.saveTelemEvent( "event2": { bool: true } );
+GlassLabSDK.saveTelemEvent( "event3": { string: "this is a test", float: 1.0 } );
+GlassLabSDK.endSessionAndFlush();
+```
+
+If you don't specify any callback function, or specifiy null, default callbacks will fire which simply print the information to the console. This information is only printed if the displayLogs option is active.
 
 ### License
 
