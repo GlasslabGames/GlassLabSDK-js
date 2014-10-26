@@ -1,0 +1,13 @@
+{
+    "name": "glasslab-sdk-js",
+    "version": "0.2.0",
+    "main": "lib/glasslab-sdk.js",
+    "ignore": [
+        "node_modules",
+        ".*"
+    ],
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+}
