@@ -107,6 +107,8 @@ The GlassLab SDK exposes many functions that communicate with the server to perf
 | getSaveGame() | Retrieves the save game blob for the current authenticated user. | N/A |
 | postSaveGame(data) | Records a JSON-formatted save game blob for the current authenticated user. | N/A |
 | postSaveGameBinary(binary) | Records a binary save game blob for the current authenticated user. | N/A |
+| createMatch(opponentId) | Creates a new match record on the server with calling user Id and parameter opponent Id. This entire match record is then returned and stored locally. | N/A |
+| updateMatch(matchId, data, nextPlayerTurn) | Updates an existing match record using the parameter match Id. The data is inserted in the history portion of the match record. It is expected the game client govern the turn logic, so we require the Id of the next player turn passed along as well. | N/A |
 
 The above repsonse messages assume a valid and successful request. If the request was unsuccessful, which could either be due to internet connection state or invalid data, the server will respond with a JSON-formatted string indicating the error.
 
@@ -128,6 +130,8 @@ It is important to get the response immediately from on-demand requests, because
 - startPlaySession()
 - getAchievements()
 - getSaveGame()
+- createMatch()
+- updateMatch()
 
 The remaining requests are inserted into a queue to be called later. We do this to avoid overloading the servers with high-frequncy, high-volume http requests. The queue flush is determined by parameters set via getConfig(), which include minimum number of events available, maximum number of events available, and dispatch interval (typically set to 30 seconds). To ensure all data is sent at the end of a game session, you can call endSessionAndFlush() which will automatically flush the queue after ending the session. The queued requests are:
 - startSession()
@@ -138,6 +142,20 @@ The remaining requests are inserted into a queue to be called later. We do this 
 - saveAchievement()
 - postSaveGame()
 - postSaveGameBinary()
+
+Multiplayer
+-----------
+
+There are three additional API functions included with the multiplayer update:
+- createMatch(opponentId)
+- updateMatch(matchId, data, nextPlayerTurn)
+- pollMatches()
+
+Both createMatch() and updateMatch() are triggered by the client; they are required to establish new matches on the server and update them. The pollMatches() function is called internally at a defined interval. This method will ask for all matches associated with the current user Id and store them in a matches array. Individual matches in the matches array can be accessed by the following helper function:
+- getMatchForId(matchId)
+
+Match records stored in this container adhere to the following format:
+
 
 Callbacks
 ---------
