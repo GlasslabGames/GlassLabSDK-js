@@ -155,7 +155,27 @@ Both createMatch() and updateMatch() are triggered by the client; they are requi
 - getMatchForId(matchId)
 
 Match records stored in this container adhere to the following format:
+```
+{
+  "id": 1,
+  "data": {
+    "players": [
+      27,
+      22
+    ],
+    "status": "active",
+    "history": [],
+    "meta": {
+      "playerTurn": 27
+    }
+  }
+}
+```
+This data includes the list of player Ids, a status string (will either be "active" or "closed"), history of turns (each their own custom JSON blob), and any meta information. The meta information is purely for the developer to store any custom information, but we include "playerTurn" to indicate the current player's turn. This is also useful to know whether we should reject updateMatch() calls for users that cannot make another move until the opponent does.
 
+The history array is where custom move information will be appended. The data parameter in the updateMatch() function requires a JSON-formatted object. That object will appended to the history object in the match record. The third parameter, nextPlayerTurn, will update meta.playerTurn properly.
+
+It will be up to the client to update the game UI properly using the match information, which is retrieved upon a successful pollMatches() call.
 
 Callbacks
 ---------
