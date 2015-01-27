@@ -177,6 +177,8 @@ The history array is where custom move information will be appended. The data pa
 
 It will be up to the client to update the game UI properly using the match information, which is retrieved upon a successful pollMatches() call.
 
+*Finally, only games that are configured to allow multiplayer will have access to these APIs. Contact a GlassLab admin if you wish to configure your game for multiplayer.*
+
 Callbacks
 ---------
 
