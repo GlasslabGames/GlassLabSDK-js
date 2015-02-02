@@ -1,6 +1,6 @@
 {
   "name": "GlassLab-JS-SDK",
-  "version": "0.2.1",
+  "version": "0.3.2",
   "devDependencies": {
     "grunt": "latest",
     "mocha": "^1.21.5",
