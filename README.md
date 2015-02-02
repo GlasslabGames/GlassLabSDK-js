@@ -91,6 +91,7 @@ The GlassLab SDK exposes many functions that communicate with the server to perf
 | deviceUpdate() | Associates the authenticated user with the device Id, which is automatically set as "user_OS_browser". The user won't need to call this function directly. | N/A |
 | getAuthStatus() | Checks if the user is already authenticated with the server. | success: getPlayerInfo |
 | getPlayerInfo() | Automatically called upon successful login() and getAuthStatus(). Retrieves the current totalTimePlayed for authenticated user. The user won't need to call this function directly. | N/A |
+| getUserInfo() | Retrieves the current user object for the authenticated user. This will provide a JSON blob including user Id, username, first name, last initial, and email (if it exists). | N/A |
 | login(username, password) | Attempts to log the user into the system. | success: getPlayerInfo |
 | logout() | Attempts to log the user out of the system. | N/A |
 | enroll(courseCode) | Attempts to enroll the authenticated user to a course denoted by a 5-character code. | N/A |
@@ -122,6 +123,7 @@ It is important to get the response immediately from on-demand requests, because
 - deviceUpdate()
 - getAuthStatus()
 - getPlayerInfo()
+- getUserInfo()
 - login()
 - logout()
 - enroll()
@@ -151,8 +153,10 @@ There are three additional API functions included with the multiplayer update:
 - updateMatch(matchId, data, nextPlayerTurn)
 - pollMatches()
 
-Both createMatch() and updateMatch() are triggered by the client; they are required to establish new matches on the server and update them. The pollMatches() function is called internally at a defined interval. This method will ask for all matches associated with the current user Id and store them in a matches array. Individual matches in the matches array can be accessed by the following helper function:
-- getMatchForId(matchId)
+Both createMatch() and updateMatch() are triggered by the client; they are required to establish new matches on the server and update them. The pollMatches() function is called internally at a defined interval. This method will ask for all matches associated with the current user Id and store them in a matches array. You can also use the following helper functions to access match information::
+- getMatches(): returns all match objects
+- getMatchIds(): returns an array of match Ids this user is associated with
+- getMatchForId(matchId): returns a specific match object
 
 Match records stored in this container adhere to the following format:
 ```
