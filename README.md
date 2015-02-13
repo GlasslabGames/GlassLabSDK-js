@@ -96,7 +96,8 @@ The GlassLab SDK exposes many functions that communicate with the server to perf
 | logout() | Attempts to log the user out of the system. | N/A |
 | enroll(courseCode) | Attempts to enroll the authenticated user to a course denoted by a 5-character code. | N/A |
 | unenroll(courseId) | Attempts to unenroll the authenticated user from a course denoted by the course Id. This Id can be retrieved from getCourses(). | N/A |
-| getCourses() | Retrieves a list of enrolled courses for the current authenticated user. | N/A |
+| getCourses(showMembers) | Retrieves a list of enrolled courses for the current authenticated user. The list will include students enrolled if showMembers is true. By default, this API filters out all courses not associated with the current gameId. | N/A |
+| getCourse(courseId, showMembers) | Retrieves a course by id for the current authenticated user. The course blob will include students enrolled if showMembers is true. By default, this API filters out all courses not associated with the current gameId. | N/A |
 | startPlaySession() | Automatically called at the start of the app session. The user will not need to call this function directly. | N/A |
 | startSession() | Attempts to start a new session for gathering telemetry. A session Id will be returned which will be attached to all subsequent telemetry events. | N/A |
 | endSession() | Attempts to end the current session. | N/A |
@@ -129,6 +130,7 @@ It is important to get the response immediately from on-demand requests, because
 - enroll()
 - unenroll()
 - getCourses()
+- getCourse()
 - startPlaySession()
 - getAchievements()
 - getSaveGame()
