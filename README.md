@@ -150,12 +150,13 @@ The remaining requests are inserted into a queue to be called later. We do this 
 Multiplayer
 -----------
 
-There are three additional API functions included with the multiplayer update:
+There are four additional API functions included with the multiplayer update:
 - createMatch(opponentId)
 - updateMatch(matchId, data, nextPlayerTurn)
-- pollMatches()
+- pollMatches(status)
+- completeMatch(matchId)
 
-Both createMatch() and updateMatch() are triggered by the client; they are required to establish new matches on the server and update them. The pollMatches() function is called internally at a defined interval. This method will ask for all matches associated with the current user Id and store them in a matches array. You can also use the following helper functions to access match information::
+The createMatch(), updateMatch(), and completeMatch() APIs are triggered by the client; they are required to establish new matches on the server and update them. The pollMatches() function is called internally at a defined interval. This method will ask for all matches associated with the current user Id and store them in a matches array. You can also use the following helper functions to access match information::
 - getMatches(): returns all match objects
 - getMatchIds(): returns an array of match Ids this user is associated with
 - getMatchForId(matchId): returns a specific match object
@@ -165,10 +166,14 @@ Match records stored in this container adhere to the following format:
 {
   "id": 1,
   "data": {
-    "players": [
-      27,
-      22
-    ],
+    "players": {
+      "22": {
+        "playerStatus": "active"
+      },
+      "27": {
+        "playerStatus": "active"
+      }
+    },
     "status": "active",
     "history": [],
     "meta": {
@@ -177,11 +182,18 @@ Match records stored in this container adhere to the following format:
   }
 }
 ```
-This data includes the list of player Ids, a status string (will either be "active" or "closed"), history of turns (each their own custom JSON blob), and any meta information. The meta information is purely for the developer to store any custom information, but we include "playerTurn" to indicate the current player's turn. This is also useful to know whether we should reject updateMatch() calls for users that cannot make another move until the opponent does.
+This data includes an object containing the player Ids, each with a "playerStatus" field indicating whether or not that player has completed the match and is no longer viewing, a status string (will either be "active" or "closed"), history of turns (each their own custom JSON blob), and any meta information. The meta information is purely for the developer to store any custom information, but we include "playerTurn" to indicate the current player's turn. This is also useful to know whether we should reject updateMatch() calls for users that cannot make another move until the opponent does.
 
 The history array is where custom move information will be appended. The data parameter in the updateMatch() function requires a JSON-formatted object. That object will appended to the history object in the match record. The third parameter, nextPlayerTurn, will update meta.playerTurn properly.
 
-It will be up to the client to update the game UI properly using the match information, which is retrieved upon a successful pollMatches() call.
+It will be up to the client to update the game UI properly using the match information, which is retrieved upon a successful pollMatches() call. The pollMatches() call takes a "status" field to check, which can be one of the following:
+- "active" (returns only active and still playable matches)
+- "complete" (returns only matches that have been completed in the past)
+- "all" (returns all matches, both active and completed)
+
+By default, pollMatches() will only return "active" matches.
+
+The completeMatch() API is used to mark a match as completed by one of the players. This means the player was either victorious, forfeited, or lost. This API will set the "playerStatus" field in the appropriate player object to "complete" in order to mark the player's own view as complete, to hide it from subsequent pollMatches() calls, but only when all players have observed the match as completed will the match itself be marked as "complete" with the "status" field.
 
 *Finally, only games that are configured to allow multiplayer will have access to these APIs. Contact a GlassLab admin if you wish to configure your game for multiplayer.*
 
