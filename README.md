@@ -79,6 +79,10 @@ GlassLabSDK.displayLogs();
 GlassLabSDK.hideLogs();
 ```
 
+**HTTPS**
+
+Before we can consider the game for release on our production servers, the game must be fully tested over https://. This is a simple change for games that don't have webviews, as it just requires the connect URI to include the secure protocol, but games with webviews require additional work. You can find more information on that below.
+
 API Format and Examples
 -----------------------
 
