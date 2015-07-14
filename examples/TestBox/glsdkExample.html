@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Glass Lab Services Reference Example</title>
+		<link rel="stylesheet" type="text/css" href="glsdkExample.css">
+
+        <script type="text/javascript" src="glsdkExample.js"></script>
+        <script type="text/javascript" src="glasslab-sdk.js"></script>
+
+        <script>
+
+        	/** Initializes the javascript. */
+        	function Init()
+        	{
+        		// Init glass lab sdk.
+
+        		// Init example code.
+        		glsdkExample.Init("commandButtons");
+        	}
+		</script>
+	</head>
+
+	<body onload="Init();" style="background-color:#D4D4D4">
+		<!-- The description and the canvas. -->
+		<div class="BodyText">
+			<section>
+				<h1 style="text-align:left">Glass Lab SDK Example</h1>
+			</section>
+		</div>
+
+		<div class="output"></div>
+
+		<div id="commandButtons">
+			<div class="buttons">
+				<p><span>connect</span><span>local</span><br></p>
+				<p><span>login</span><input id="gl-username" type="text" placeholder="Screen Name"> <input id="gl-password" type="password" placeholder="Password"> <br></p>
+				<p><span>logout</span><br></p>
+				<p><span>getAuthStatus</span><span>getUserInfo</span><span>getPlayerInfo</span><br></p>
+				<p><span>enroll</span><input id="gl-enrollcourseid" type="text" placeholder="Course ID"><br></p>
+				<p><span>getCourses</span><span>getCourses members</span><br></p>
+				<p><span>getCourse</span><input id="gl-getcourseid" type="text" placeholder="Course ID"><br></p>
+				<p><span>getCourse members</span><input id="gl-getcourseidmembers" type="text" placeholder="Course ID"><br></p>
+				<p><span>startSession</span><span>saveTelemEvent</span><span>endSession</span><br></p>
+				<p><span>saveAchievement</span><span>getAchievements</span><br></p>
+				<p><span>postSaveGame</span><span>getSaveGame</span><br></p>
+			</div>
+		</div>
+	</body>
+</html>

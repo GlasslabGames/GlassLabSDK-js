@@ -1,0 +1,79 @@
+
+/*************************************************************************************************************
+ *
+ *	glsdkExample.css
+ *
+ *	Description: css file for the example buttons.
+ *
+ *************************************************************************************************************/
+
+/* Main buttons settings.  Drop box around whole button area, background gradient */
+#commandButtons
+{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+	font: 30px Arial, sans-serif;
+
+	width: 1000px;
+	height: 800px;
+	
+	margin: 1px;
+	margin-right: 0;
+	padding: 5px 5px 5px;
+	
+	background: #4080ea;
+	background: linear-gradient(#4080ea, #3070da);
+	border-radius: 3px;
+	box-shadow: 0px 4px #2060ca;
+	overflow: hidden;
+}
+
+/* Make sure overflow isn't displayed */
+.buttons {overflow: hidden;}
+
+/* Formatting for the buttons */
+.buttons span
+{
+	float: left;
+	position: relative;
+	top: 0;
+	
+	cursor: pointer;
+	
+	width: 300px;
+	height: 36px;
+	
+	background: #D0D0FF;
+	box-sizing: border-box;
+	box-shadow: 0px 4px #8080AA;
+	border-radius: 3px;
+	margin: 8px;
+	
+	padding: 0;
+	
+	font-size: 25px;
+	color: #888;
+	line-height: 36px;
+	text-align: center;
+	
+	user-select: none;
+	transition: all 0.2s ease;
+}
+
+/* Some hover effects for the buttons */
+.buttons span:hover
+{
+	background: #706088;
+	box-shadow: 0px 4px #504066;
+	color: white;
+}
+
+/* Simulating "pressed" effect on active state of the buttons by removing the box-shadow and moving the buttons down a bit */
+.buttons span:active
+{
+	box-shadow: 0px 0px #6b54d3;
+	top: 4px;
+}
+
