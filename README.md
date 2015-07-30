@@ -96,7 +96,7 @@ The GlassLab SDK exposes many functions that communicate with the server to perf
 | getAuthStatus() | Checks if the user is already authenticated with the server. | success: getPlayerInfo |
 | getPlayerInfo() | Automatically called upon successful login() and getAuthStatus(). Retrieves the current totalTimePlayed for authenticated user. The user won't need to call this function directly. | N/A |
 | getUserInfo() | Retrieves the current user object for the authenticated user. This will provide a JSON blob including user Id, username, first name, last initial, and email (if it exists). | N/A |
-| login(username, password) | Attempts to log the user into the system. | success: getPlayerInfo |
+| login(username, password) | WARNING: username and password args have been deprecated. Attempts to log the user into the system. | success: getPlayerInfo |
 | logout() | Attempts to log the user out of the system. | N/A |
 | enroll(courseCode) | Attempts to enroll the authenticated user to a course denoted by a 5-character code. | N/A |
 | unenroll(courseId) | Attempts to unenroll the authenticated user from a course denoted by the course Id. This Id can be retrieved from getCourses(). | N/A |
