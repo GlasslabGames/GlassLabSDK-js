@@ -1,6 +1,6 @@
 {
     "name": "glasslab-sdk-js",
-    "version": "0.3.4",
+    "version": "0.4.2",
     "main": "lib/glasslab-sdk.js",
     "ignore": [
         "node_modules",
